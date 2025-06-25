@@ -1,33 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Routes, Route } from 'react-router'
+import Homepage from './pages/Homepage.jsx'
+import Loginpage from './pages/Loginpage.jsx'
+import Notificationpage from './pages/Notificationspage.jsx'
+import Onboardingpage from './pages/Onboardingpage.jsx'
+import Signuppage from './pages/Signuppage.jsx'
+import Chatpage from './pages/Chatpage.jsx'
+import Callpage from './pages/Callpage.jsx'
+import React from 'react'
+import axios from 'axios'
+import { axiosInstance } from './lib/axiosInstance.js'
 
+import { Toaster, toast } from 'react-hot-toast'
+import { useQuery } from '@tanstack/react-query'
 function App() {
-  const [count, setCount] = useState(0)
+  // Set the base URL for axios
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('https://localhost:5173/api/auth/me')
+      return response.data
+    },
+    refetchOnWindowFocus: false,   
+  })
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    
+      <div className='h-screen' data-theme='coffee'>
+        <button onClick={()=> toast.success("Hello!!!!")}>Create a toast</button>
+        <Routes>
+          <Route path='/' element={<Homepage/>} />
+          <Route path='/login' element={<Loginpage />} />
+          <Route path='/notifications' element={<Notificationpage />} />
+          <Route path='/onboarding' element={<Onboardingpage />} />
+          <Route path='/signup' element={<Signuppage />} />
+          <Route path='/chat' element={<Chatpage />} />
+          <Route path='/call' element={<Callpage />} />
+
+        </Routes>
+        <Toaster />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
