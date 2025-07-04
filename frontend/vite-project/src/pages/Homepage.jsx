@@ -1,8 +1,20 @@
-const Homepage = () => {
+
+import Hero from "../components/Hero";
+import Features from "../components/Features";
+import HowItWorks from "../components/HowItWorks";
+import Testimonials from "../components/Testimonials";
+import Footer from "../components/Footer";
+
+const HomePage = () => {
   return (
-    <div className="bg-blue-500 h-screen w-screen flex items-center justify-center" data-theme="dark">
-      <h1 className="text-white text-4xl">Homepage</h1>
+    <div className="min-h-screen">
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <Testimonials />
+      <Footer />
     </div>
   );
-}
-export default Homepage;
+};
+
+export default HomePage;
