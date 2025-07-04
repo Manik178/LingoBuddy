@@ -1,48 +1,41 @@
-import './App.css'
-import { Routes, Route } from 'react-router'
-import Homepage from './pages/Homepage.jsx'
-import Loginpage from './pages/Loginpage.jsx'
-import Notificationpage from './pages/Notificationspage.jsx'
-import Onboardingpage from './pages/Onboardingpage.jsx'
-import Signuppage from './pages/Signuppage.jsx'
-import Chatpage from './pages/Chatpage.jsx'
-import Callpage from './pages/Callpage.jsx'
-import React from 'react'
-import axios from 'axios'
-import { axiosInstance } from './lib/axiosInstance.js'
+import { Routes, Route } from 'react-router';
+import HomePage from './pages/HomePage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import CallPage from './pages/CallPage.jsx';
+import ChatPage from './pages/ChatPage.jsx';
+import NotificationsPage from './pages/NotificationsPage.jsx';
+import OnboardingPage from './pages/OnboardingPage.jsx';
 
-import { Toaster, toast } from 'react-hot-toast'
-import { useQuery } from '@tanstack/react-query'
-function App() {
-  // Set the base URL for axios
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['user'],
+import { Toaster } from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from './lib/axios.js';
+
+const App = () => {
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['authUser'],
     queryFn: async () => {
-      const response = await axiosInstance.get('https://localhost:5173/api/auth/me')
-      return response.data
+      const response = await axiosInstance.get('/auth/me', {
+        withCredentials: true,
+      });
+      return response.data;
     },
-    refetchOnWindowFocus: false,   
-  })
-
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 10, // 10 minutes
+  });
   return (
-    <>
-    
-      <div className='h-screen' data-theme='coffee'>
-        <button onClick={()=> toast.success("Hello!!!!")}>Create a toast</button>
-        <Routes>
-          <Route path='/' element={<Homepage/>} />
-          <Route path='/login' element={<Loginpage />} />
-          <Route path='/notifications' element={<Notificationpage />} />
-          <Route path='/onboarding' element={<Onboardingpage />} />
-          <Route path='/signup' element={<Signuppage />} />
-          <Route path='/chat' element={<Chatpage />} />
-          <Route path='/call' element={<Callpage />} />
-
-        </Routes>
-        <Toaster />
-      </div>
-    </>
+    <div className="min-h-screen flex items-center justify-center" data-theme="coffee">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/call" element={<CallPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
+      </Routes>
+    </div>
   )
-}
+};
 
-export default App
+export default App;

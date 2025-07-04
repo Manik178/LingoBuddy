@@ -9,4 +9,11 @@ router.post('/logout', logout);
 
 // Middleware to check if user is authenticated
 router.post('/onboard', protectRoute, onboard);
+
+router.get('/me', protectRoute, (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: req.user, // req.user is set by the protectRoute middleware
+  });
+});
 export default router;
